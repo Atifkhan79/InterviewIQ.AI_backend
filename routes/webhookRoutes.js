@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { Order } from "../models/Order.js";
 
 const router = express.Router();
-const stripe = new Stripe("sk_test_51Sk6fpGEnnZFi8I3V9WyZCP0EB4Bb037rwtEYu0aB2kcO8loZAIgYanaQwMmirwHISIBc6Hi228cplGQs3vYeuUp00bxDrFynP");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY,);
 
 // IMPORTANT: raw body needed
 router.post("/", express.raw({ type: "application/json" }), async (req, res) => {

@@ -2,7 +2,7 @@ import fs from "fs";
 import { AsyncHandler } from "../middleware/asyncHandler.js";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { askAi } from "../services/openRouter.service.js";
-import ErrorHandler from "../middleWare/errorHandler.js";
+import ErrorHandler from "../middleware/errorHandler.js";
 import { User } from "../models/userModel.js";
 import { errorMonitor } from "events";
 import Interview from "../models/interviewModel.js";

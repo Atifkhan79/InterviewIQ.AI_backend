@@ -1,4 +1,4 @@
-import ErrorHandler from '../middleWare/errorHandler.js'
+import ErrorHandler from '../middleware/errorHandler.js'
 import {AsyncHandler} from "../middleware/asyncHandler.js"
 import {dbConnection} from '../dataBase/dbConnection.js'
 import bcrypt from "bcrypt"

@@ -28,23 +28,38 @@ export const analyzeResume = AsyncHandler(async (req, res, next) => {
     console.log("Uploaded file size:", req.file.size);
     console.log("Uploaded file mimetype:", req.file.mimetype);
 
-    const resumeText = await new Promise((resolve, reject) => {
-      const pdfParser = new PDFParser();
+ const resumeText = await new Promise((resolve, reject) => {
+  const pdfParser = new PDFParser();
 
-      pdfParser.on("pdfParser_dataError", (errData) => {
-        console.error("PDF Parse Error:", errData.parserError);
-        reject(new Error(errData.parserError));
-      });
+  pdfParser.on("pdfParser_dataError", (errData) => {
+    console.error("PDF Parse Error:", errData.parserError);
+    reject(new Error(errData.parserError));
+  });
 
-      pdfParser.on("pdfParser_dataReady", () => {
-        const rawText = pdfParser.getRawTextContent();
-        console.log("Extracted PDF text length:", rawText.length);
-        console.log("Extracted PDF text sample:", rawText.slice(0, 300));
-        resolve(rawText.replace(/\s+/g, " ").trim());
-      });
+  pdfParser.on("pdfParser_dataReady", (pdfData) => {
+    try {
+      let text = "";
 
-      pdfParser.loadPDF(filepath);
-    });
+      const pages = pdfData?.Pages || [];
+      for (const page of pages) {
+        for (const textItem of page.Texts || []) {
+          for (const run of textItem.R || []) {
+            text += decodeURIComponent(run.T) + " ";
+          }
+        }
+      }
+
+      console.log("Manually extracted text length:", text.length);
+      console.log("Manually extracted sample:", text.slice(0, 300));
+
+      resolve(text.replace(/\s+/g, " ").trim());
+    } catch (err) {
+      reject(err);
+    }
+  });
+
+  pdfParser.loadPDF(filepath);
+});
 
     console.log("Final resumeText length before AI call:", resumeText.length);
 

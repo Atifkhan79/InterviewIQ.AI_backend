@@ -1,8 +1,10 @@
 import multer from "multer";
+import os from "os";
+import path from "path";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public");
+    cb(null, os.tmpdir()); // Vercel-safe writable directory
   },
   filename: function (req, file, cb) {
     const filename = Date.now() + "-" + file.originalname;

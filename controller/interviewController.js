@@ -1,14 +1,8 @@
 import fs from "fs";
 import pdfParse from "pdf-parse";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
-
-
-
 import { errorMonitor } from "events";
-
 import { nextTick } from "process";
-
-
 import { AsyncHandler } from "../middleware/asyncHandler.js";
 import { askAi } from "../services/openRouter.service.js";
 import ErrorHandler from "../middleware/errorHandler.js";
@@ -19,7 +13,9 @@ import Interview from "../models/interviewModel.js";
 
 
 
-
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const pdfParse = require("pdf-parse");
 
 
 

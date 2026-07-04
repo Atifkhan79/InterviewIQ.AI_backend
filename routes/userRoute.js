@@ -13,7 +13,7 @@ import {
   getCurrentUser
 } from "../controller/userController.js";
 
-import { isAuthenticated } from "../middleWare/authMiddleWare.js";
+import { isAuthenticated } from "../middleware/authMiddleWare.js";
 
 const userRouter = express.Router();
 

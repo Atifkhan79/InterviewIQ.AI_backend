@@ -9,7 +9,7 @@ import {
   submitAnswer
 } from "../controller/interviewController.js";
 
-import { isAuthenticated } from "../middleWare/authMiddleWare.js";
+import { isAuthenticated } from "../middleware/authMiddleWare.js";
 
 const interviewRouter = express.Router();
 

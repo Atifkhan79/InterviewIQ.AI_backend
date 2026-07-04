@@ -7,13 +7,13 @@ import express from 'express';
 import { dbConnection } from './dataBase/dbConnection.js';
 
 import cookieParser from "cookie-parser";
-import userRouter from "./routes/userRoute.js";
-import { errorMiddleware } from "./middleware/errorHandler.js";
+import userRouter from "./routes/userroute.js";
+import { errorMiddleware } from "./middleware/errorhandler.js";
 import cors from "cors";
-import interviewRouter from './routes/interviewRoute.js';
+import interviewRouter from './routes/interviewroute.js';
 
-import paymentRoutes from "./routes/paymentRoutes.js";
-import webhookRoutes from "./routes/webhookRoutes.js";
+import paymentRoutes from "./routes/paymentroutes.js";
+import webhookRoutes from "./routes/webhookroutes.js";
 
 
 

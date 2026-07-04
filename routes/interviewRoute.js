@@ -7,19 +7,17 @@ import {
   getInterviewReport,
   getMyInterviews,
   submitAnswer
-} from "../controller/interviewvcontroller.js";
+} from "../controller/interviewController.js";
 
-import { isAuthenticated } from "../middleware/authmiddleWare.js";
+import { isAuthenticated } from "../middleware/authMiddleware.js";
 
 const interviewRouter = express.Router();
 
-interviewRouter.post('/resume',isAuthenticated,upload.single("resume"),analyzeResume)
-interviewRouter.post("/generate-questions",isAuthenticated,generateQuestion)
-interviewRouter.post("/submit-answer",isAuthenticated,submitAnswer)
-interviewRouter.post("/finish",isAuthenticated,finalReport)
-interviewRouter.get("/get-interview", isAuthenticated,getMyInterviews)
-interviewRouter.get("/report/:id",isAuthenticated,getInterviewReport)
-
-
+interviewRouter.post('/resume', isAuthenticated, upload.single("resume"), analyzeResume);
+interviewRouter.post("/generate-questions", isAuthenticated, generateQuestion);
+interviewRouter.post("/submit-answer", isAuthenticated, submitAnswer);
+interviewRouter.post("/finish", isAuthenticated, finalReport);
+interviewRouter.get("/get-interview", isAuthenticated, getMyInterviews);
+interviewRouter.get("/report/:id", isAuthenticated, getInterviewReport);
 
 export default interviewRouter;

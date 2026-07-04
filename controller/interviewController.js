@@ -1,5 +1,5 @@
 import fs from "fs";
-
+import pdfParse from "pdf-parse";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 
 
@@ -24,7 +24,7 @@ import Interview from "../models/interviewModel.js";
 
 
 
-export const analyzeResume = AsyncHandler(async (req, res) => {
+export const analyzeResume = AsyncHandler(async (req, res, next) => {
   try {
     if (!req.file) {
       return next(new ErrorHandler("Resume Required", 400));
@@ -33,23 +33,9 @@ export const analyzeResume = AsyncHandler(async (req, res) => {
     const filepath = req.file.path;
 
     const fileBuffer = await fs.promises.readFile(filepath);
-    const uint8Array = new Uint8Array(fileBuffer);
+    const data = await pdfParse(fileBuffer);
 
-    const pdf = await pdfjsLib.getDocument({ data: uint8Array }).promise;
-
-    let resumeText = "";
-
-    //Extract text from all pages
-
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
-      const content = await page.getTextContent();
-
-      const pageText = content.items.map((item) => item.str).join(" ");
-      resumeText += pageText + "\n";
-    }
-
-    resumeText = resumeText.replace(/\s+/g, " ").trim();
+    let resumeText = data.text.replace(/\s+/g, " ").trim();
 
     const messeges = [
       {
@@ -78,18 +64,16 @@ Format:
     ];
 
     const aiResponse = await askAi(messeges);
-    const parsed = JSON.parse(aiResponse);
+
     const safeParseAI = (text) => {
       try {
         if (!text) throw new Error("Empty AI response");
 
-        // 1. Remove markdown fences
         let cleaned = text
           .replace(/```json/g, "")
           .replace(/```/g, "")
           .trim();
 
-        // 2. Extract JSON block (MOST IMPORTANT FIX)
         const firstBrace = cleaned.indexOf("{");
         const lastBrace = cleaned.lastIndexOf("}");
 
@@ -99,7 +83,6 @@ Format:
 
         cleaned = cleaned.slice(firstBrace, lastBrace + 1);
 
-        // 3. Parse safely
         return JSON.parse(cleaned);
       } catch (err) {
         console.error("JSON Parse Failed:", err.message);
@@ -108,7 +91,13 @@ Format:
       }
     };
 
+    const parsed = safeParseAI(aiResponse);
+
     fs.unlinkSync(filepath);
+
+    if (!parsed) {
+      return next(new ErrorHandler("Failed to parse AI response", 500));
+    }
 
     res.json({
       role: parsed.role,
@@ -123,9 +112,10 @@ Format:
       fs.unlinkSync(req.file.path);
     }
 
-    res.status(500).json({ messege: error.messege });
+    return next(new ErrorHandler(error.message || "Failed to analyze resume", 500));
   }
 });
+
 
 export const generateQuestion = AsyncHandler(async (req, res) => {
   try {

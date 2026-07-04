@@ -1,10 +1,9 @@
 import fs from "fs";
-import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { errorMonitor } from "events";
 import { nextTick } from "process";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const pdfParse = require("pdf-parse");
+const PDFParser = require("pdf2json");
 import { AsyncHandler } from "../middleware/asyncHandler.js";
 import { askAi } from "../services/openRouter.service.js";
 import ErrorHandler from "../middleware/errorHandler.js";
@@ -26,10 +25,20 @@ export const analyzeResume = AsyncHandler(async (req, res, next) => {
 
     const filepath = req.file.path;
 
-    const fileBuffer = await fs.promises.readFile(filepath);
-    const data = await pdfParse(fileBuffer);
+    const resumeText = await new Promise((resolve, reject) => {
+      const pdfParser = new PDFParser();
 
-    let resumeText = data.text.replace(/\s+/g, " ").trim();
+      pdfParser.on("pdfParser_dataError", (errData) => {
+        reject(new Error(errData.parserError));
+      });
+
+      pdfParser.on("pdfParser_dataReady", () => {
+        const rawText = pdfParser.getRawTextContent();
+        resolve(rawText.replace(/\s+/g, " ").trim());
+      });
+
+      pdfParser.loadPDF(filepath);
+    });
 
     const messeges = [
       {

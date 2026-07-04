@@ -1,11 +1,11 @@
 import fs from "fs";
-import { AsyncHandler } from "../middleware/asyncHandler.js";
+import { AsyncHandler } from "../middleware/asynchandler.js";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
-import { askAi } from "../services/openRouter.service.js";
-import ErrorHandler from "../middleware/errorHandler.js";
-import { User } from "../models/userModel.js";
+import { askAi } from "../services/openrouter.service.js";
+import ErrorHandler from "../middleware/errorhandler.js";
+import { User } from "../models/usermodel.js";
 import { errorMonitor } from "events";
-import Interview from "../models/interviewModel.js";
+import Interview from "../models/interviewmodel.js";
 import { nextTick } from "process";
 
 export const analyzeResume = AsyncHandler(async (req, res) => {

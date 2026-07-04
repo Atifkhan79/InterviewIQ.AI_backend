@@ -1,5 +1,5 @@
-import ErrorHandler from '../middleware/errorHandler.js'
-import {AsyncHandler} from "../middleware/asyncHandler.js"
+import ErrorHandler from '../middleware/errorhandler.js'
+import {AsyncHandler} from "../middleware/asynchandler.js"
 import {dbConnection} from '../dataBase/dbConnection.js'
 import bcrypt from "bcrypt"
 import  {sendToken}  from '../utils/sendToken.js'
@@ -7,7 +7,7 @@ import { generatePasswordResetToken } from "../utils/generatePasswordResetToken.
 import  sendEmail  from '../utils/sendEmail.js'
 import { generateEmailTemplate } from "../utils/emailTemplate.js";
 import crypto from "crypto"
-import { User } from "../models/userModel.js"; 
+import { User } from "../models/usermodel.js"; 
 
 
 

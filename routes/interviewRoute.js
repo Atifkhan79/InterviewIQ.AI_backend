@@ -7,9 +7,9 @@ import {
   getInterviewReport,
   getMyInterviews,
   submitAnswer
-} from "../controller/interviewController.js";
+} from "../controller/interviewvcontroller.js";
 
-import { isAuthenticated } from "../middleware/authMiddleWare.js";
+import { isAuthenticated } from "../middleware/authmiddleWare.js";
 
 const interviewRouter = express.Router();
 

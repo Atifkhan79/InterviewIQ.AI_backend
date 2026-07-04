@@ -11,9 +11,9 @@ import {
   updateProfile,
   googleAuth,
   getCurrentUser
-} from "../controller/userController.js";
+} from "../controller/usercontroller.js";
 
-import { isAuthenticated } from "../middleware/authMiddleWare.js";
+import { isAuthenticated } from "../middleware/authmiddleWare.js";
 
 const userRouter = express.Router();
 

@@ -138,16 +138,19 @@ export const logOut = AsyncHandler(async (req, res, next) => {
   res
     .status(200)
     .cookie("token", "", {
-      expires: new Date(0), // immediately expire cookie
+      expires: new Date(0),
       httpOnly: true,
-      secure: true, // use in production (HTTPS)
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none",
     })
     .json({
       success: true,
       message: "Logged out successfully",
     });
-});
+});git add .
+git commit -m "fix: correct cookie sameSite/secure attributes for cross-origin auth"
+git push
+vercel --prod --force
 
 
 

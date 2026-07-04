@@ -24,21 +24,29 @@ export const analyzeResume = AsyncHandler(async (req, res, next) => {
     }
 
     const filepath = req.file.path;
+    console.log("Uploaded file path:", filepath);
+    console.log("Uploaded file size:", req.file.size);
+    console.log("Uploaded file mimetype:", req.file.mimetype);
 
     const resumeText = await new Promise((resolve, reject) => {
       const pdfParser = new PDFParser();
 
       pdfParser.on("pdfParser_dataError", (errData) => {
+        console.error("PDF Parse Error:", errData.parserError);
         reject(new Error(errData.parserError));
       });
 
       pdfParser.on("pdfParser_dataReady", () => {
         const rawText = pdfParser.getRawTextContent();
+        console.log("Extracted PDF text length:", rawText.length);
+        console.log("Extracted PDF text sample:", rawText.slice(0, 300));
         resolve(rawText.replace(/\s+/g, " ").trim());
       });
 
       pdfParser.loadPDF(filepath);
     });
+
+    console.log("Final resumeText length before AI call:", resumeText.length);
 
     const messeges = [
       {
@@ -67,6 +75,7 @@ Format:
     ];
 
     const aiResponse = await askAi(messeges);
+    console.log("Raw AI response:", aiResponse);
 
     const safeParseAI = (text) => {
       try {
@@ -122,7 +131,7 @@ Format:
 
 export const generateQuestion = AsyncHandler(async (req, res) => {
   try {
-    let { role, experience, mode, resumwText, projects, skills } = req.body;
+    let { role, experience, mode, resumeText, projects, skills } = req.body;
 
     role = role?.trim();
     experience = experience?.trim();

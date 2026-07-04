@@ -144,7 +144,7 @@ Format:
 });
 
 
-export const generateQuestion = AsyncHandler(async (req, res) => {
+export const generateQuestion = AsyncHandler(async (req, res, next) => {
   try {
     let { role, experience, mode, resumeText, projects, skills } = req.body;
 
@@ -176,7 +176,7 @@ export const generateQuestion = AsyncHandler(async (req, res) => {
     const skillsText =
       Array.isArray(skills) && skills.length ? skills.join(", ") : "None";
 
-    const safeResume = resumwText?.trim() || "None";
+    const safeResume = resumeText?.trim() || "None";
 
     const userPrompt = `
     Role :${role}
@@ -227,7 +227,6 @@ Question 5 → hard
 
     const aiResponse = await askAi(messages);
 
-    // FIXED CONDITION
     if (!aiResponse || !aiResponse.trim()) {
       return next(new ErrorHandler("AI returned empty response", 500));
     }
@@ -266,9 +265,7 @@ Question 5 → hard
     });
 
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: `Failed to create interview ${error}` });
+    return next(new ErrorHandler(error.message || "Failed to create interview", 500));
   }
 });
 

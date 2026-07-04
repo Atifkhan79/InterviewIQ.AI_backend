@@ -2,7 +2,7 @@
 node_modules/
 .pnp
 .pnp.js
-
+.config.env
 # Environment variables (never commit secrets like STRIPE_SECRET_KEY, MONGODB_URI, etc.)
 .env
 .env.local

@@ -449,7 +449,7 @@ export const finalReport = AsyncHandler(async (req, res) => {
 
 export const getMyInterviews = AsyncHandler(async (req, res) => {
   try {
-    const interview = await Interview.find({ userId: req.userId })
+    const interview = await Interview.find({ userId: req.user._id })
       .sort({ createdAt: -1 })
       .select("role experience mode finalScore status createdAt");
 
@@ -463,6 +463,7 @@ export const getMyInterviews = AsyncHandler(async (req, res) => {
     });
   }
 });
+
 
 
 export const getInterviewReport = AsyncHandler(async (req, res) => {

@@ -14,7 +14,7 @@ import webhookRoutes from "./routes/webhookRoutes.js";
 export const app = express();
 
 const allowedOrigins = [
-  "http://localhost:5173",
+  "https://onlineinterviewmanagementsystem.netlify.app",
   process.env.FRONTEND_URL,
 ].filter(Boolean);
 

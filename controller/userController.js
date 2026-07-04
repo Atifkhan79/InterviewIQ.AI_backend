@@ -1,5 +1,5 @@
 import ErrorHandler from '../middleWare/errorHandler.js'
-import {AsyncHandler} from "../middleWare/asyncHandler.js"
+import {AsyncHandler} from "../middleware/asyncHandler.js"
 import {dbConnection} from '../dataBase/dbConnection.js'
 import bcrypt from "bcrypt"
 import  {sendToken}  from '../utils/sendToken.js'

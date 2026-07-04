@@ -244,18 +244,18 @@ Question 5 → hard
     user.credits -= 50;
     await user.save();
 
-    const interview = await Interview.create({
-      userid: user._id,
-      role,
-      experience,
-      mode,
-      resumeText: safeResume,
-      questions: questionArray.map((q, index) => ({
-        question: q,
-        difficulty: ["easy", "easy", "medium", "medium", "hard"][index],
-        timeLimit: [60, 60, 90, 90, 120][index],
-      })),
-    });
+   const interview = await Interview.create({
+  userid: user._id,   // ← lowercase, matches schema
+  role,
+  experience,
+  mode,
+  resumeText: safeResume,
+  questions: questionArray.map((q, index) => ({
+    question: q,
+    difficulty: ["easy", "easy", "medium", "medium", "hard"][index],
+    timeLimit: [60, 60, 90, 90, 120][index],
+  })),
+});
 
     res.json({
       interviewId: interview._id,
@@ -449,19 +449,13 @@ export const finalReport = AsyncHandler(async (req, res) => {
 
 export const getMyInterviews = AsyncHandler(async (req, res) => {
   try {
-    const interview = await Interview.create({
-  userId: user._id,
-  role,
-  experience,
-  mode,
+    const interview = await Interview.find({ userid: req.user._id })   // ← lowercase "userid" to match schema
+      .sort({ createdAt: -1 })
+      .select("role experience mode finalScore status createdAt");
 
-  resumeText: safeResume,
-  questions: questionArray.map((q, index) => ({
-    question: q,
-    difficulty: ["easy", "easy", "medium", "medium", "hard"][index],
-    timeLimit: [60, 60, 90, 90, 120][index],
-  })),
-});
+    return res.status(200).json({
+      interview,
+    });
 
   } catch (error) {
     return res.status(500).json({

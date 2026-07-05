@@ -182,7 +182,7 @@ export const forgotPassword = AsyncHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // 4️⃣ Create reset URL (Moved safely AFTER token generation with hardcoded fallback string)
-  const baseUrl = process.env.FRONTEND_URL || frontedUrl || "https://onlineinterviewmanagementsystem.netlify.app/";
+  const baseUrl = process.env.FRONTEND_URL || frontedUrl || "https://onlineinterviewmanagementsystem.netlify.app";
   const resetPasswordUrl = `${baseUrl}/password/reset/${resetToken}`;
 
   const message = generateEmailTemplate(resetPasswordUrl);
